@@ -1,0 +1,30 @@
+{
+  "manifest_version": 2,
+  "name": "MyWeb",
+  "version": "0.1",
+  "description": "My browsing, My Webbing",
+  "icons": {
+    "48": "icon.png",
+    "96": "icon.png"
+  },
+  "permissions": [
+    "activeTab"
+  ],
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"]
+    }
+  ],
+  "browser_action": {
+    "default_icon": {
+      "19": "icon.png",
+      "38": "icon.png"
+    },
+    "default_title": "MyWeb"
+  },
+  "background": {
+    "scripts": ["background.js"],
+    "persistent": false
+  }
+}
