@@ -11,10 +11,14 @@
     fontlableName: "Font+",
     fontlableDefault: "Original",
   };
-
   let isActive = false;
   let originalFonts = new Map();
   let isOverlayHidden = false;
+  let isTrelloPage = false;
+
+  function checkTrelloPage() {
+    isTrelloPage = window.location.hostname.includes('trello.com');
+  }
 
   function storeOriginalFonts(selector) {
     const elements = document.querySelectorAll(selector);
@@ -58,11 +62,9 @@
     });
     notification.textContent = message;
     document.body.appendChild(notification);
-
     requestAnimationFrame(() => {
       notification.style.opacity = "1";
     });
-
     setTimeout(() => {
       notification.style.opacity = "0";
       notification.addEventListener(
@@ -97,12 +99,10 @@
       console.log("Custom Font: " + config.buttonID + " button already exists.");
       return;
     }
-
     const button = document.createElement("div");
     button.id = config.buttonID;
     button.textContent = config.buttonText;
     button.title = config.buttonTooltip;
-
     const buttonStyle = {
       position: "fixed",
       top: "10px",
@@ -124,7 +124,6 @@
       justifyContent: "center",
     };
     Object.assign(button.style, buttonStyle);
-
     const menu = document.createElement("div");
     menu.style.cssText = `
       position: absolute;
@@ -138,23 +137,21 @@
       box-shadow: 0 2px 10px rgba(0,0,0,0.2);
       min-width: 120px;
     `;
-
     const toggleItem = createMenuItem(isActive ? config.fontlableDefault : config.fontlableName, toggleFont);
-    const overlayItem = createMenuItem(isOverlayHidden ? "On" : "Off", toggleOverlay);
-
     menu.appendChild(toggleItem);
-    menu.appendChild(overlayItem);
+
+    if (isTrelloPage) {
+      const overlayItem = createMenuItem(isOverlayHidden ? "On" : "Off", toggleOverlay);
+      menu.appendChild(overlayItem);
+    }
 
     button.appendChild(menu);
-
     let menuVisible = false;
-
     button.addEventListener("mouseenter", () => {
       button.style.backgroundColor = "rgba(123, 110, 242, 0.8)";
       menu.style.display = "block";
       menuVisible = true;
     });
-
     button.addEventListener("mouseleave", () => {
       button.style.backgroundColor = "rgba(123, 110, 242, 0.3)";
       menuVisible = false;
@@ -164,18 +161,15 @@
         }
       }, 300);
     });
-
     menu.addEventListener("mouseenter", () => {
       button.style.backgroundColor = "rgba(123, 110, 242, 0.8)";
       menuVisible = true;
     });
-
     menu.addEventListener("mouseleave", () => {
       button.style.backgroundColor = "rgba(123, 110, 242, 0.3)";
       menuVisible = false;
       menu.style.display = "none";
     });
-
     document.body.appendChild(button);
   }
 
@@ -205,17 +199,25 @@
     const menu = document.querySelector(`#${config.buttonID} > div`);
     if (menu) {
       menu.children[0].textContent = isActive ? config.fontlableDefault : config.fontlableName;
-      menu.children[1].textContent = isOverlayHidden ? "On" : "Off";
+      if (isTrelloPage && menu.children[1]) {
+        menu.children[1].textContent = isOverlayHidden ? "On" : "Off";
+      }
     }
   }
 
-  // Add the floating button with menu
+  checkTrelloPage();
   addFontChangeButton();
 
-  // Cross-browser compatibility
-  const browserAPI = typeof chrome !== 'undefined' ? chrome : browser;
+  window.addEventListener('popstate', function() {
+    checkTrelloPage();
+    const existingButton = document.getElementById(config.buttonID);
+    if (existingButton) {
+      existingButton.remove();
+    }
+    addFontChangeButton();
+  });
 
-  // Listen for messages from the background script
+  const browserAPI = typeof chrome !== 'undefined' ? chrome : browser;
   if (browserAPI && browserAPI.runtime && browserAPI.runtime.onMessage) {
     browserAPI.runtime.onMessage.addListener((message) => {
       if (message.action === "toggleFont") {
