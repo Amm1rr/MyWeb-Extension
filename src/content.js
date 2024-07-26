@@ -14,6 +14,7 @@
 
   let isActive = false;
   let originalFonts = new Map();
+  let isOverlayHidden = false;
 
   function storeOriginalFonts(selector) {
     const elements = document.querySelectorAll(selector);
@@ -139,10 +140,10 @@
     `;
 
     const toggleItem = createMenuItem(isActive ? config.fontlableDefault : config.fontlableName, toggleFont);
-    const alertItem = createMenuItem("Show Alert", () => alert("Hello from MyWeb extension!"));
+    const overlayItem = createMenuItem(isOverlayHidden ? "On" : "Off", toggleOverlay);
 
     menu.appendChild(toggleItem);
-    menu.appendChild(alertItem);
+    menu.appendChild(overlayItem);
 
     button.appendChild(menu);
 
@@ -191,10 +192,20 @@
     updateMenuItems();
   }
 
+  function toggleOverlay() {
+    isOverlayHidden = !isOverlayHidden;
+    const style = document.createElement('style');
+    style.textContent = `.attachment-viewer-overlay { visibility: ${isOverlayHidden ? 'hidden' : 'visible'} !important; }`;
+    document.head.appendChild(style);
+    showNotification(`Attachment viewer overlay ${isOverlayHidden ? 'hidden' : 'visible'}`, config.notificationDuration);
+    updateMenuItems();
+  }
+
   function updateMenuItems() {
     const menu = document.querySelector(`#${config.buttonID} > div`);
     if (menu) {
-      menu.firstChild.textContent = isActive ? config.fontlableDefault : config.fontlableName;
+      menu.children[0].textContent = isActive ? config.fontlableDefault : config.fontlableName;
+      menu.children[1].textContent = isOverlayHidden ? "On" : "Off";
     }
   }
 
