@@ -4,8 +4,14 @@
 cd ..
 cd src/
 
+# Get the current date and time
+datetime=$(date +"%Y%m%d-%H%M%S")
+
+# Extract the version from manifest.json
+version=$(grep -Po '"version": *\K"[^"]*"' manifest.json | tr -d '"')
+
 # Define the output file name and the build folder
-output_filename="firefox.xpi"
+output_filename="firefox-v${version}-${datetime}.xpi"
 build_folder="../builds"
 
 # Create the builds folder if it does not exist
