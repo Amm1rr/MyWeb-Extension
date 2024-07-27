@@ -1,4 +1,3 @@
-// Cross-browser compatibility
 const browserAPI = typeof chrome !== 'undefined' ? chrome : browser;
 
 if (browserAPI && browserAPI.browserAction && browserAPI.browserAction.onClicked) {
@@ -8,3 +7,11 @@ if (browserAPI && browserAPI.browserAction && browserAPI.browserAction.onClicked
     }
   });
 }
+
+browserAPI.runtime.onMessage.addListener((message) => {
+  if (message.action === "toggleFont" || message.action === "toggleOverlay") {
+    browserAPI.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+      browserAPI.tabs.sendMessage(tabs[0].id, message);
+    });
+  }
+});
