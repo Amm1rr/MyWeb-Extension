@@ -1,13 +1,18 @@
-document.addEventListener('DOMContentLoaded', () => {
-  chrome.storage.sync.get('fontFamily', (data) => {
-    document.getElementById('fontFamily').value = data.fontFamily || '';
+document.addEventListener('DOMContentLoaded', function() {
+  const fontSelect = document.getElementById('fontSelect');
+  const defaultFont = 'Vazirmatn';
+
+  // Fetch and set the current font family from storage
+  const browserAPI = typeof chrome !== 'undefined' ? chrome : browser;
+  browserAPI.storage.sync.get('fontFamily', (data) => {
+    fontSelect.value = data.fontFamily || defaultFont;
   });
 
-  document.getElementById('saveFont').addEventListener('click', () => {
-    const fontFamily = document.getElementById('fontFamily').value.trim();
-    chrome.storage.sync.set({ fontFamily }, () => {
-      alert('Font family saved!');
-      chrome.runtime.sendMessage({ action: "updateFont", fontFamily });
+  // Save the selected font family to storage
+  fontSelect.addEventListener('change', function() {
+    const selectedFont = fontSelect.value;
+    browserAPI.storage.sync.set({ fontFamily: selectedFont }, function() {
+      console.log(`Font family set to ${selectedFont}`);
     });
   });
 });
