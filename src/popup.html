@@ -1,64 +1,44 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Popup</title>
+  <meta charset="UTF-8">
+  <title>MyWeb Extension</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      background-color: #f4f4f4;
       margin: 0;
-      padding: 20px;
+      padding: 0;
       width: 200px;
-      box-sizing: border-box;
+      background-color: #f4f4f9;
     }
-    h1 {
-      font-size: 16px;
-      margin: 0;
-      padding-bottom: 10px;
-      color: #333;
-    }
-    .button {
-      display: block;
-      margin: 10px 0;
+    .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
       padding: 10px;
+    }
+    button {
+      background-color: #7b6ef2;
+      color: white;
       border: none;
       border-radius: 5px;
-      background-color: #007bff;
-      color: white;
-      font-size: 14px;
-      text-align: center;
+      padding: 10px 15px;
+      margin: 5px 0;
       cursor: pointer;
-      transition: background-color 0.3s ease, transform 0.2s ease;
+      transition: background-color 0.3s;
+      width: 100%;
     }
-    .button:hover {
-      background-color: #0056b3;
-      transform: scale(1.05);
-    }
-    .button:active {
-      transform: scale(0.95);
-    }
-    .link {
-      display: block;
-      margin: 10px 0;
-      font-size: 14px;
-      text-align: center;
-      color: #007bff;
-      text-decoration: none;
-      transition: color 0.3s ease;
-    }
-    .link:hover {
-      color: #0056b3;
-    }
-    .hidden {
-      display: none;
+    button:hover {
+      background-color: #6b5de1;
     }
   </style>
 </head>
 <body>
-  <h1>Web Extension</h1>
-  <a href="options.html" class="link" target="_blank">Options</a>
-  <button id="toggleFont" class="button">Toggle Font</button>
-  <button id="toggleOverlay" class="button hidden" id="toggleOverlay">Toggle Overlay</button>
+  <div class="container">
+    <button id="toggleFont">Toggle Font</button>
+    <button id="toggleOverlay" style="display: none;">Toggle Overlay</button>
+    <button id="openOptions">Open Options</button>
+  </div>
   <script src="popup.js"></script>
 </body>
 </html>

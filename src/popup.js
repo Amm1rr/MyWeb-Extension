@@ -1,27 +1,35 @@
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', function () {
   const toggleFontButton = document.getElementById('toggleFont');
   const toggleOverlayButton = document.getElementById('toggleOverlay');
-
-  // Function to handle button visibility based on tab URL
-  function updateButtonVisibility(tabUrl) {
-    if (tabUrl.includes('trello.com')) {
-      toggleOverlayButton.classList.remove('hidden');
-    } else {
-      toggleOverlayButton.classList.add('hidden');
-    }
-  }
-
-  // Retrieve current tab's URL and update button visibility
-  chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-    const tab = tabs[0];
-    updateButtonVisibility(tab.url);
-  });
+  const openOptionsButton = document.getElementById('openOptions');
 
   toggleFontButton.addEventListener('click', () => {
-    chrome.runtime.sendMessage({ action: "toggleFont" });
+    const browserAPI = typeof chrome !== 'undefined' ? chrome : browser;
+    browserAPI.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+      browserAPI.tabs.sendMessage(tabs[0].id, { action: 'toggleFont' });
+    });
   });
 
   toggleOverlayButton.addEventListener('click', () => {
-    chrome.runtime.sendMessage({ action: "toggleOverlay" });
+    const browserAPI = typeof chrome !== 'undefined' ? chrome : browser;
+    browserAPI.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+      browserAPI.tabs.sendMessage(tabs[0].id, { action: 'toggleOverlay' });
+    });
+  });
+
+  openOptionsButton.addEventListener('click', () => {
+    const browserAPI = typeof chrome !== 'undefined' ? chrome : browser;
+    browserAPI.runtime.openOptionsPage();
+  });
+
+  // Check if the current tab is trello.com
+  const browserAPI = typeof chrome !== 'undefined' ? chrome : browser;
+  browserAPI.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+    const currentTab = tabs[0];
+    if (currentTab.url.includes('trello.com')) {
+      toggleOverlayButton.style.display = 'block';
+    } else {
+      toggleOverlayButton.style.display = 'none';
+    }
   });
 });
