@@ -63,3 +63,5 @@ If you encounter any problems or have any suggestions, please open an issue on t
 ---
 
 Developed with ❤️ by Amir
+
+[![](https://visitcount.itsvg.in/api?id=amm1rr&label=V&color=0&icon=2&pretty=true)](https://github.com/Amm1rr/)
