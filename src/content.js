@@ -6,11 +6,10 @@
     iconURL: "assets/icon.png",
     notificationDuration: 2000,
     buttonFadeDuration: 2000,
-    notificationMessage: "Fonts updated.",
+    notificationMessage: "Font updated: ",
     buttonTooltip: "Enhance readability with custom font",
     fontlableName: "Font+",
     fontlableDefault: "Original",
-    optionsURL: "options.html",  // URL of the options page
   };
 
   let isActive = false;
@@ -22,6 +21,7 @@
     const browserAPI = typeof chrome !== 'undefined' ? chrome : browser;
     config.iconURL = browserAPI.runtime.getURL('assets/icon.png');
   }
+
   setIconURL();
 
   function checkTrelloPage() {
@@ -107,7 +107,6 @@
       console.log("Custom Font: " + config.buttonID + " button already exists.");
       return;
     }
-
     const button = document.createElement("div");
     button.id = config.buttonID;
     button.title = config.buttonTooltip;
@@ -153,9 +152,8 @@
       display: none;
       z-index: 10000;
       box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-      min-width: 150px;
+      min-width: 120px;
     `;
-
     const toggleItem = createMenuItem(isActive ? config.fontlableDefault : config.fontlableName, toggleFont);
     menu.appendChild(toggleItem);
 
@@ -163,11 +161,6 @@
       const overlayItem = createMenuItem(isOverlayHidden ? "On" : "Off", toggleOverlay);
       menu.appendChild(overlayItem);
     }
-
-    const optionsItem = createMenuItem("Options", () => {
-      window.open(chrome.runtime.getURL(config.optionsURL), '_blank');
-    });
-    menu.appendChild(optionsItem);
 
     button.appendChild(menu);
     let menuVisible = false;
@@ -198,8 +191,9 @@
   }
 
   function toggleFont() {
-    chrome.storage.sync.get('fontFamily', (data) => {
-      const fontFamily = data.fontFamily || config.defaultFontFamily;
+    const browserAPI = typeof chrome !== 'undefined' ? chrome : browser;
+    browserAPI.storage.sync.get('fontFamily', (data) => {
+      const fontFamily = (data && data.fontFamily) ? data.fontFamily : config.defaultFontFamily;
 
       if (!isActive) {
         isActive = true;
