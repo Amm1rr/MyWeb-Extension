@@ -3,14 +3,62 @@
 <head>
   <title>Popup</title>
   <style>
-    body { font-family: Arial, sans-serif; }
-    .button { display: block; margin: 10px; padding: 10px; text-align: center; background-color: #007bff; color: white; text-decoration: none; }
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 20px;
+      width: 200px;
+      box-sizing: border-box;
+    }
+    h1 {
+      font-size: 16px;
+      margin: 0;
+      padding-bottom: 10px;
+      color: #333;
+    }
+    .button {
+      display: block;
+      margin: 10px 0;
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+      background-color: #007bff;
+      color: white;
+      font-size: 14px;
+      text-align: center;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+    .button:hover {
+      background-color: #0056b3;
+      transform: scale(1.05);
+    }
+    .button:active {
+      transform: scale(0.95);
+    }
+    .link {
+      display: block;
+      margin: 10px 0;
+      font-size: 14px;
+      text-align: center;
+      color: #007bff;
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+    .link:hover {
+      color: #0056b3;
+    }
+    .hidden {
+      display: none;
+    }
   </style>
 </head>
 <body>
-  <a href="options.html" class="button" target="_blank">Options</a>
+  <h1>Web Extension</h1>
+  <a href="options.html" class="link" target="_blank">Options</a>
   <button id="toggleFont" class="button">Toggle Font</button>
-  <button id="toggleOverlay" class="button">Toggle Overlay</button>
+  <button id="toggleOverlay" class="button hidden" id="toggleOverlay">Toggle Overlay</button>
   <script src="popup.js"></script>
 </body>
 </html>
