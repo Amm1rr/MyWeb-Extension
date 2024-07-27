@@ -1,3 +1,4 @@
 *.pem
 src.crx
 /.idea/
+src/build-firefox.sh
