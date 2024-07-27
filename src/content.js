@@ -10,6 +10,7 @@
     buttonTooltip: "Enhance readability with custom font",
     fontlableName: "Font+",
     fontlableDefault: "Original",
+    optionsURL: "options.html",  // URL of the options page
   };
 
   let isActive = false;
@@ -152,8 +153,9 @@
       display: none;
       z-index: 10000;
       box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-      min-width: 120px;
+      min-width: 150px;
     `;
+
     const toggleItem = createMenuItem(isActive ? config.fontlableDefault : config.fontlableName, toggleFont);
     menu.appendChild(toggleItem);
 
@@ -161,6 +163,11 @@
       const overlayItem = createMenuItem(isOverlayHidden ? "On" : "Off", toggleOverlay);
       menu.appendChild(overlayItem);
     }
+
+    const optionsItem = createMenuItem("Options", () => {
+      window.open(chrome.runtime.getURL(config.optionsURL), '_blank');
+    });
+    menu.appendChild(optionsItem);
 
     button.appendChild(menu);
     let menuVisible = false;
