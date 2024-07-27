@@ -3,7 +3,7 @@
     fontFamily: "Vazirmatn",
     selector: "body *:not(#mywebext, #mywebext *)",
     buttonID: "mywebext",
-    buttonText: "A",
+    iconURL: "assets/icon.png",
     notificationDuration: 2000,
     buttonFadeDuration: 2000,
     notificationMessage: "Fonts updated: Vazirmatn font applied.",
@@ -15,6 +15,12 @@
   let originalFonts = new Map();
   let isOverlayHidden = false;
   let isTrelloPage = false;
+
+  function setIconURL() {
+    const browserAPI = typeof chrome !== 'undefined' ? chrome : browser;
+    config.iconURL = browserAPI.runtime.getURL('assets/icon.png');
+  }
+  setIconURL();
 
   function checkTrelloPage() {
     isTrelloPage = window.location.hostname.includes('trello.com');
@@ -101,8 +107,9 @@
     }
     const button = document.createElement("div");
     button.id = config.buttonID;
-    button.textContent = config.buttonText;
     button.title = config.buttonTooltip;
+    button.setAttribute('role', 'button');
+    button.setAttribute('aria-label', config.buttonTooltip);
     const buttonStyle = {
       position: "fixed",
       top: "10px",
@@ -112,18 +119,26 @@
       height: "30px",
       borderRadius: "50%",
       backgroundColor: "rgba(123, 110, 242, 0.3)",
-      color: "#FFFFFF",
       border: "none",
-      fontWeight: "bold",
-      fontFamily: "Arial",
       cursor: "pointer",
       boxShadow: "0 2px 5px rgba(0,0,0,0.3)",
       transition: "all 0.3s ease",
       display: "flex",
       alignItems: "center",
       justifyContent: "center",
+      backgroundImage: `url(${config.iconURL})`,
+      backgroundSize: "24px 24px",
+      backgroundPosition: "center",
+      backgroundRepeat: "no-repeat",
     };
     Object.assign(button.style, buttonStyle);
+
+    const img = new Image();
+    img.onerror = function() {
+      button.textContent = 'A';
+    };
+    img.src = config.iconURL;
+
     const menu = document.createElement("div");
     menu.style.cssText = `
       position: absolute;
