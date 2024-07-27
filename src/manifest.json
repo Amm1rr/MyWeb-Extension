@@ -4,11 +4,14 @@
   "version": "0.1",
   "description": "My browsing, My Webbing",
   "icons": {
-    "48": "icon.png",
-    "96": "icon.png"
+    "48": "assets/icon.png",
+    "96": "assets/icon.png"
   },
   "permissions": [
     "activeTab"
+  ],
+  "web_accessible_resources": [
+    "assets/icon.png"
   ],
   "content_scripts": [
     {
@@ -18,8 +21,8 @@
   ],
   "browser_action": {
     "default_icon": {
-      "19": "icon.png",
-      "38": "icon.png"
+      "19": "assets/icon.png",
+      "38": "assets/icon.png"
     },
     "default_title": "MyWeb"
   },
