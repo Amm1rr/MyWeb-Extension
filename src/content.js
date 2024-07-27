@@ -1,16 +1,17 @@
 (function () {
   const config = {
-    fontFamily: "Vazirmatn",
+    defaultFontFamily: "Vazirmatn",
     selector: "body *:not(#mywebext, #mywebext *)",
     buttonID: "mywebext",
     iconURL: "assets/icon.png",
     notificationDuration: 2000,
     buttonFadeDuration: 2000,
-    notificationMessage: "Fonts updated: Vazirmatn font applied.",
-    buttonTooltip: "Enhance readability with Vazirmatn font",
+    notificationMessage: "Fonts updated.",
+    buttonTooltip: "Enhance readability with custom font",
     fontlableName: "Font+",
     fontlableDefault: "Original",
   };
+
   let isActive = false;
   let originalFonts = new Map();
   let isOverlayHidden = false;
@@ -105,6 +106,7 @@
       console.log("Custom Font: " + config.buttonID + " button already exists.");
       return;
     }
+
     const button = document.createElement("div");
     button.id = config.buttonID;
     button.title = config.buttonTooltip;
@@ -189,16 +191,20 @@
   }
 
   function toggleFont() {
-    if (!isActive) {
-      isActive = true;
-      applyCustomFont(config.selector, config.fontFamily);
-      showNotification(config.notificationMessage, config.notificationDuration);
-    } else {
-      isActive = false;
-      removeCustomFont();
-      showNotification("Original font restored", config.notificationDuration);
-    }
-    updateMenuItems();
+    chrome.storage.sync.get('fontFamily', (data) => {
+      const fontFamily = data.fontFamily || config.defaultFontFamily;
+
+      if (!isActive) {
+        isActive = true;
+        applyCustomFont(config.selector, fontFamily);
+        showNotification(`Font updated to ${fontFamily}.`, config.notificationDuration);
+      } else {
+        isActive = false;
+        removeCustomFont();
+        showNotification("Original font restored", config.notificationDuration);
+      }
+      updateMenuItems();
+    });
   }
 
   function toggleOverlay() {
@@ -236,6 +242,10 @@
   if (browserAPI && browserAPI.runtime && browserAPI.runtime.onMessage) {
     browserAPI.runtime.onMessage.addListener((message) => {
       if (message.action === "toggleFont") {
+        toggleFont();
+      } else if (message.action === "toggleOverlay") {
+        toggleOverlay();
+      } else if (message.action === "updateFont") {
         toggleFont();
       }
     });
