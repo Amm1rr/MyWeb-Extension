@@ -1,5 +1,5 @@
 *.pem
-src.crx
+*.crx
+*.xpi
 /.idea/
-src/build-firefox
 src/build
