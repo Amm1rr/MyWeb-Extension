@@ -23,7 +23,7 @@
   ],
   "browser_action": {
     "default_title": "MyWeb",
-    "default_popup": "popup.html",  // Specifies the popup to show
+    "default_popup": "popup.html",
     "default_icon": {
       "19": "assets/icon.png",
       "38": "assets/icon.png"
